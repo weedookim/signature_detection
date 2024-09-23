@@ -1,0 +1,9 @@
+/venv
+/data
+/processed_data/models
+/processed_data/signed
+/processed_data/unsigned
+streamlit_app_image_v1.py
+streamlit_app_app.py
+streamlit.py
+training.ipynb
