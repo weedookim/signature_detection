@@ -1,56 +1,56 @@
 import streamlit as st
-from pdf2image import convert_from_path
+#from pdf2image import convert_from_path
 import tempfile
 from fastai.vision.all import load_learner, PILImage
 from PIL import Image
 import pdfplumber
 
 #PDF를 이미지로 변환하고 관심 영역(ROI)을 크롭하는 함수
-def convert_pdf_to_image_and_crop(pdf_file, dpi=600):
-    # PDF 파일이 비어 있는지 확인
-    if pdf_file.size == 0:
-        st.error("Uploaded file is empty. Please upload a valid PDF file.")
-        return None
+# def convert_pdf_to_image_and_crop(pdf_file, dpi=600):
+#     # PDF 파일이 비어 있는지 확인
+#     if pdf_file.size == 0:
+#         st.error("Uploaded file is empty. Please upload a valid PDF file.")
+#         return None
 
-    try:
-        # PDF를 임시 파일로 저장
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-            tmp_file.write(pdf_file.read())  # Streamlit UploadedFile 객체를 파일로 저장
-            tmp_file.flush()  # 데이터를 확실히 저장
+#     try:
+#         # PDF를 임시 파일로 저장
+#         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+#             tmp_file.write(pdf_file.read())  # Streamlit UploadedFile 객체를 파일로 저장
+#             tmp_file.flush()  # 데이터를 확실히 저장
 
-        # convert_from_path로 PDF 파일을 이미지로 변환
-        images = convert_from_path(tmp_file.name, dpi=dpi)
+#         # convert_from_path로 PDF 파일을 이미지로 변환
+#         images = convert_from_path(tmp_file.name, dpi=dpi)
 
-        if not images:
-            return None
+#         if not images:
+#             return None
 
-        # 첫 번째 페이지의 이미지 가져오기
-        image = images[0]
+#         # 첫 번째 페이지의 이미지 가져오기
+#         image = images[0]
 
-        # 관심 영역(ROI) 지정 (예: 우측 상단에서 가로 10cm, 세로 5cm 크롭)
-        cm_to_inch = 2.54
-        dpi_to_cm_ratio = dpi / cm_to_inch
+#         # 관심 영역(ROI) 지정 (예: 우측 상단에서 가로 10cm, 세로 5cm 크롭)
+#         cm_to_inch = 2.54
+#         dpi_to_cm_ratio = dpi / cm_to_inch
 
-        roi_width_px = int(15 * dpi_to_cm_ratio)  # 10cm를 픽셀로 변환
-        roi_height_px = int(8 * dpi_to_cm_ratio)  # 5cm를 픽셀로 변환
+#         roi_width_px = int(15 * dpi_to_cm_ratio)  # 10cm를 픽셀로 변환
+#         roi_height_px = int(8 * dpi_to_cm_ratio)  # 5cm를 픽셀로 변환
 
-        # 이미지 크기 구하기
-        img_width, img_height = image.size
+#         # 이미지 크기 구하기
+#         img_width, img_height = image.size
 
-        # 관심 영역을 오른쪽 상단에서 크롭 (left, top, right, bottom)
-        left = img_width - roi_width_px
-        top = 0
-        right = img_width
-        bottom = roi_height_px
+#         # 관심 영역을 오른쪽 상단에서 크롭 (left, top, right, bottom)
+#         left = img_width - roi_width_px
+#         top = 0
+#         right = img_width
+#         bottom = roi_height_px
 
-        # 크롭된 이미지
-        roi_image = image.crop((left, top, right, bottom))
+#         # 크롭된 이미지
+#         roi_image = image.crop((left, top, right, bottom))
 
-        return roi_image
+#         return roi_image
 
-    except Exception as e:
-        st.error(f"Failed to process the PDF: {e}")
-        return None
+#     except Exception as e:
+#         st.error(f"Failed to process the PDF: {e}")
+#         return None
 
 
 # PDF를 이미지로 변환하고 관심 영역(ROI)을 크롭하는 함수
@@ -100,53 +100,56 @@ def convert_pdf_to_image_and_crop(pdf_file, dpi=600):
 #         return None
 
 # PDF를 이미지로 변환하고 관심 영역(ROI)을 크롭하는 함수
-# def convert_pdf_to_image_and_crop(pdf_file, dpi = 600):
-#     # PDF 파일이 비어 있는지 확인
-#     if pdf_file.size == 0:
-#         st.error("Uploaded file is empty. Please upload a valid PDF file.")
-#         return None
+def convert_pdf_to_image_and_crop(pdf_file, dpi = 600):
+    # PDF 파일이 비어 있는지 확인
+    if pdf_file.size == 0:
+        st.error("Uploaded file is empty. Please upload a valid PDF file.")
+        return None
 
-#     try:
-#         # PDF를 임시 파일로 저장
-#         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-#             tmp_file.write(pdf_file.read())  # Streamlit UploadedFile 객체를 파일로 저장
-#             tmp_file.flush()  # 데이터를 확실히 저장
+    try:
+        # PDF를 임시 파일로 저장
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            tmp_file.write(pdf_file.read())  # Streamlit UploadedFile 객체를 파일로 저장
+            tmp_file.flush()  # 데이터를 확실히 저장
 
-#         # pdfplumber로 PDF 파일 열기
-#         with pdfplumber.open(tmp_file.name) as pdf:
-#             # 첫 번째 페이지 가져오기
-#             first_page = pdf.pages[0]
-#             # 페이지를 이미지로 변환
-#             page_image = first_page.to_image()
+        # pdfplumber로 PDF 파일 열기
+        with pdfplumber.open(tmp_file.name) as pdf:
+            # 첫 번째 페이지 가져오기
+            first_page = pdf.pages[0]
+            # 페이지를 이미지로 변환
+            page_image = first_page.to_image(resolution=dpi)
 
-#             # PIL 이미지를 가져오기
-#             img = page_image.original
+            # PIL 이미지를 가져오기
+            img = page_image.original
 
-#             # 관심 영역(ROI) 지정 (예: 우측 상단에서 가로 10cm, 세로 5cm 크롭)
-#             cm_to_inch = 2.54
-#             dpi = dpi  # pdfplumber 기본 DPI는 72로 설정
-#             dpi_to_cm_ratio = dpi / cm_to_inch
+            # 관심 영역(ROI) 지정 (예: 우측 상단에서 가로 10cm, 세로 5cm 크롭)
+            cm_to_inch = 2.54
+            dpi = dpi  # pdfplumber 기본 DPI는 72로 설정
+            dpi_to_cm_ratio = dpi / cm_to_inch
 
-#             roi_width_px = int(15 * dpi_to_cm_ratio)  # 10cm를 픽셀로 변환
-#             roi_height_px = int(8 * dpi_to_cm_ratio)  # 5cm를 픽셀로 변환
+            roi_width_px = int(15 * dpi_to_cm_ratio)  # 10cm를 픽셀로 변환
+            roi_height_px = int(8 * dpi_to_cm_ratio)  # 5cm를 픽셀로 변환
 
-#             # 이미지 크기 구하기
-#             img_width, img_height = img.size
+            # 이미지 크기 구하기
+            img_width, img_height = img.size
 
-#             # 관심 영역을 오른쪽 상단에서 크롭 (left, top, right, bottom)
-#             left = img_width - roi_width_px
-#             top = 0
-#             right = img_width
-#             bottom = roi_height_px
+            # 관심 영역을 오른쪽 상단에서 크롭 (left, top, right, bottom)
+            left = img_width - roi_width_px
+            top = 0
+            right = img_width
+            bottom = roi_height_px
 
-#             # 크롭된 이미지
-#             roi_image = img.crop((left, top, right, bottom))
+            # 크롭된 이미지
+            roi_image = img.crop((left, top, right, bottom))
 
-#             return roi_image
+            return roi_image
 
-#     except Exception as e:
-#         st.error(f"Failed to process the PDF file: {e}")
-#         return None
+    except Exception as e:
+        st.error(f"Failed to process the PDF file: {e}")
+        return None
+
+
+
         
 # 서명 인식 모델을 사용해 예측하는 함수
 def predict_signature_in_pdf(pdf_file, learner_path='./processed_data/signature_detector.pkl', dpi=600):
